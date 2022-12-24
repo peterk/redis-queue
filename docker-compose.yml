@@ -1,0 +1,47 @@
+version: '3'
+services:
+  web:
+    container_name: web
+    build: ./web
+    command: flask run --host=0.0.0.0 --port=8000
+    environment:
+    - PYTHONUNBUFFERED=1
+    - FLASK_APP=app.py
+    - FLASK_DEBUG=1
+    - FLASK_KEY=${FLASK_KEY}
+    - 'RUN=flask run --host=0.0.0.0 --port=8000'
+    - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - ./web:/web
+    ports:
+      - "8080:8000"  # Make Flask available on port 8080
+    depends_on:
+      - redis
+    networks:
+      - redis_net
+  redis:
+    container_name: redis
+    image: redis:7.0.7-alpine3.17
+    restart: unless-stopped
+    environment:
+    - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - './data/redis:/data'      
+    command: redis-server --save 30 1 --loglevel warning --maxmemory 100mb --requirepass "${REDIS_PASSWORD}"
+    networks:
+      - redis_net    
+  worker:
+    build: ./worker
+    command: python worker.py
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_PASSWORD=${REDIS_PASSWORD}    
+    volumes:
+      - ./worker:/worker
+    depends_on:
+      - redis
+    networks:
+      - redis_net
+networks:
+  redis_net:
+    driver: bridge

@@ -1,0 +1,19 @@
+<!doctype html>
+<title>Redis example</title>
+<nav>
+  <h1>Redis queue example</h1>
+</nav>
+<section class="content">
+  <header>
+    <p>Current queue length: {{ qlen }}</p>
+  </header>
+
+
+  <form method="post" action="/">
+    <label for="jobsecs">Job seconds</label>
+    <input name="jobsecs" id="jobsecs" required>
+    <input type="submit" value="Submit job">
+  </form>
+
+
+</section>
