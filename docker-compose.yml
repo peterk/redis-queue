@@ -1,7 +1,6 @@
 version: '3'
 services:
   web:
-    container_name: web
     build: ./web
     command: flask run --host=0.0.0.0 --port=8000
     environment:
@@ -20,7 +19,6 @@ services:
     networks:
       - redis_net
   redis:
-    container_name: redis
     image: redis:7.0.7-alpine3.17
     restart: unless-stopped
     environment:

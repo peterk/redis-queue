@@ -42,3 +42,5 @@ docker compose start redis
 
 1. Please note the default information in the .env file. Not suitable for production.
 2. Update versions of all libraries/images in requirements.txt, Dockerfile and docker-compose.yml if you start from this solution in your own project.
+3. A failed job execution does not reschedule the job.
+4. No proper logging
